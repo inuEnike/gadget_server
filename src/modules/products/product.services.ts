@@ -22,6 +22,24 @@ export class ProductService {
     const product = ProductRepository.create(data);
     return product;
   }
-  static async findByIdAndUpdate(id: string) {}
-  static async findByIdAndDelete(id: string) {}
+  static async findByIdAndUpdate(id: string, data: IProducts) {
+    if (!id) {
+      throw new Error("The Id is required");
+    }
+    const product = await ProductRepository.findByIdAndUpdate(id, data);
+    if (!product) {
+      throw new Error("No Product with the id found");
+    }
+    return product;
+  }
+  static async findByIdAndDelete(id: string) {
+    if (!id) {
+      throw new Error("The Id is required");
+    }
+    const product = await ProductRepository.findByIdAndDelete(id);
+    if (!product) {
+      throw new Error("No Product with the id found");
+    }
+    return product;
+  }
 }

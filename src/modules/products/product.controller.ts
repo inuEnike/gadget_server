@@ -9,8 +9,12 @@ export class ProductController {
   }
   static async find(req: Request, res: Response, next: NextFunction) {
     try {
-      const cacheKey = "product:all";
+      // getting the cache key
+      const cacheKey = "products:all";
+      //   using the cache key to get the cacehd products
       const cachedProducts = await redis.get(cacheKey);
+
+      // if there's products in the cache
       if (cachedProducts) {
         return res.status(200).json({
           success: true,
@@ -20,8 +24,14 @@ export class ProductController {
         });
       }
 
+      // fetch the product from the database
       const products = await ProductService.find();
 
+      /**
+       * If there's no cache product
+       * set the product to the redis cache
+       *
+       */
       await redis.set(cacheKey, JSON.stringify(products), {
         expiration: {
           type: "EX",
@@ -42,7 +52,7 @@ export class ProductController {
     try {
       const instance = new ProductController();
       let id = instance.getId(req);
-      const cacheKey = `product:${id}`;
+      const cacheKey = `products:${id}`;
       const cacheProduct = await redis.get(cacheKey);
       if (cacheProduct) {
         res.status(200).json({
@@ -65,6 +75,7 @@ export class ProductController {
     try {
       let data = req.body;
       const product = await ProductService.create(data);
+      await redis.del("products:all");
       res.status(201).json({
         success: true,
         message: "Product Created successfully ",
@@ -74,6 +85,53 @@ export class ProductController {
       next(error);
     }
   }
-  static async findByIdAndUpdate(id: string, data: IProducts) {}
-  static async findByIdAndDelete(id: string) {}
+  static async findByIdAndUpdate(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      let data = req.body;
+      const instance = new ProductController();
+      let id = instance.getId(req);
+      const product = await ProductService.findByIdAndUpdate(
+        id as string,
+        data,
+      );
+
+      await redis.del("products:all");
+      await redis.del(`products:${id}`);
+
+      res.status(201).json({
+        success: true,
+        message: "Product Updated successfully ",
+        product,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async findByIdAndDelete(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      let instance = new ProductController();
+      const id = instance.getId(req);
+      const product = await ProductService.findByIdAndDelete(id as string);
+
+      await redis.del("products:all");
+      await redis.del(`products:${id}`);
+
+      res.status(200).json({
+        success: true,
+        message: "Product Deleted successfully ",
+        product,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
