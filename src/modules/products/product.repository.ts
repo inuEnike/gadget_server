@@ -3,7 +3,7 @@ import type { IProducts } from "./product.types";
 
 export class ProductRepository {
   static async find() {
-    const products = await Product.find().lean().exec();
+    const products = await Product.find({}).lean().exec();
     return products;
   }
   static async findById(id: string) {

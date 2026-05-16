@@ -21,7 +21,8 @@ export const ProductValidation = (data: IProducts) => {
     throw new Error("Please fill in the respected fields");
   }
 
-  if (ProductPrice <= 0.0) {
+  if (Number(ProductPrice) < 0.0) {
+    throw new Error("Product price shoud not be less than 1 naira");
   }
   return;
 };

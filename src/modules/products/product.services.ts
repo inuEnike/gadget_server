@@ -21,7 +21,6 @@ export class ProductService {
     ProductValidation(data);
     const product = ProductRepository.create(data);
     return product;
-    
   }
   static async findByIdAndUpdate(id: string) {}
   static async findByIdAndDelete(id: string) {}
