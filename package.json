@@ -18,6 +18,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/streamifier": "^0.1.2",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
@@ -28,6 +29,7 @@
     "mongoose": "^9.6.2",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.7",
-    "redis": "^5.12.1"
+    "redis": "^5.12.1",
+    "streamifier": "^0.1.1"
   }
 }

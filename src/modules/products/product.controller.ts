@@ -1,7 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 import type { IProducts } from "./product.types";
+import streamifier from "streamifier";
 import { ProductService } from "./product.services";
 import { redis } from "../../../shared/core/redis/connection";
+import cloudinary from "../../../shared/utils/cloudinary";
+import { log } from "console";
+import { uploadToCloudinary } from "../../../shared/utils/uploadToCloudinary";
 
 export class ProductController {
   private getId(req: Request) {
@@ -73,7 +77,23 @@ export class ProductController {
   }
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      let data = req.body;
+      const files = req.files as Express.Multer.File[];
+      let imageUrls: string[] = [];
+
+      if (files && files.length > 0) {
+        const uploadPromises = files.map((file) => uploadToCloudinary(file));
+
+        imageUrls = await Promise.all(uploadPromises);
+      }
+
+
+      console.log(imageUrls);
+
+      const data = {
+        ...req.body,
+        ProductImages: imageUrls,
+      };
+
       const product = await ProductService.create(data);
       await redis.del("products:all");
       res.status(201).json({

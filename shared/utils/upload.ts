@@ -6,16 +6,16 @@ const storage = multer.memoryStorage();
 export const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 2 * 1024 * 1024,
+    fileSize: 5 * 1024 * 1024,
   },
 
-  fileFilter(req, file, callback) {
+  fileFilter(_req, file, callback) {
     const allowed = ["image/png", "image/jpeg", "image/webp"];
     const ext = path.extname(file.originalname).toLowerCase();
     const allowedExt = [".png", ".jpg", ".jpeg", ".webp"];
     let extOk = allowedExt.includes(ext);
     if (!extOk) {
-      return callback(new Error("Invalid fine extension"));
+      return callback(new Error("Invalid file extension"));
     }
 
     if (!allowed.includes(file.mimetype)) {
