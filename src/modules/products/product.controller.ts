@@ -1,17 +1,15 @@
 import type { NextFunction, Request, Response } from "express";
-import type { IProducts } from "./product.types";
-import streamifier from "streamifier";
 import { ProductService } from "./product.services";
 import { redis } from "../../../shared/core/redis/connection";
-import cloudinary from "../../../shared/utils/cloudinary";
-import { log } from "console";
 import { uploadToCloudinary } from "../../../shared/utils/uploadToCloudinary";
 
 export class ProductController {
   private getId(req: Request) {
     return req?.params?.id;
   }
-  static async find(req: Request, res: Response, next: NextFunction) {
+  constructor(private service: ProductService) {}
+
+  find = async (req: Request, res: Response, next: NextFunction) => {
     try {
       // getting the cache key
       const cacheKey = "products:all";
@@ -29,7 +27,7 @@ export class ProductController {
       }
 
       // fetch the product from the database
-      const products = await ProductService.find();
+      const products = await this.service.find();
 
       /**
        * If there's no cache product
@@ -51,11 +49,10 @@ export class ProductController {
     } catch (error) {
       next(error);
     }
-  }
-  static async findById(req: Request, res: Response, next: NextFunction) {
+  };
+  findById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const instance = new ProductController();
-      let id = instance.getId(req);
+      let id = this.getId(req);
       const cacheKey = `products:${id}`;
       const cacheProduct = await redis.get(cacheKey);
       if (cacheProduct) {
@@ -65,7 +62,7 @@ export class ProductController {
         });
       }
 
-      const product = await ProductService.findById(id as string);
+      const product = await this.service.findById(id as string);
 
       res.status(200).json({
         success: true,
@@ -74,8 +71,8 @@ export class ProductController {
     } catch (error) {
       next(error);
     }
-  }
-  static async create(req: Request, res: Response, next: NextFunction) {
+  };
+  create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const files = req.files as Express.Multer.File[];
       let imageUrls: string[] = [];
@@ -86,7 +83,6 @@ export class ProductController {
         imageUrls = await Promise.all(uploadPromises);
       }
 
-
       console.log(imageUrls);
 
       const data = {
@@ -94,7 +90,7 @@ export class ProductController {
         ProductImages: imageUrls,
       };
 
-      const product = await ProductService.create(data);
+      const product = await this.service.create(data);
       await redis.del("products:all");
       res.status(201).json({
         success: true,
@@ -104,20 +100,16 @@ export class ProductController {
     } catch (error) {
       next(error);
     }
-  }
-  static async findByIdAndUpdate(
+  };
+  findByIdAndUpdate = async (
     req: Request,
     res: Response,
     next: NextFunction,
-  ) {
+  ) => {
     try {
       let data = req.body;
-      const instance = new ProductController();
-      let id = instance.getId(req);
-      const product = await ProductService.findByIdAndUpdate(
-        id as string,
-        data,
-      );
+      let id = this.getId(req);
+      const product = await this.service.findByIdAndUpdate(id as string, data);
 
       await redis.del("products:all");
       await redis.del(`products:${id}`);
@@ -130,17 +122,16 @@ export class ProductController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  static async findByIdAndDelete(
+  findByIdAndDelete = async (
     req: Request,
     res: Response,
     next: NextFunction,
-  ) {
+  ) => {
     try {
-      let instance = new ProductController();
-      const id = instance.getId(req);
-      const product = await ProductService.findByIdAndDelete(id as string);
+      const id = this.getId(req);
+      const product = await this.service.findByIdAndDelete(id as string);
 
       await redis.del("products:all");
       await redis.del(`products:${id}`);
@@ -153,5 +144,5 @@ export class ProductController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }

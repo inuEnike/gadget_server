@@ -3,43 +3,44 @@ import type { IProducts } from "./product.types";
 import { ProductValidation } from "./product.validation";
 
 export class ProductService {
-  static async find() {
-    const products = await ProductRepository.find();
+  constructor(private repository: ProductRepository) {}
+  find = async () => {
+    const products = await this.repository.find();
     return products;
-  }
-  static async findById(id: string) {
+  };
+  findById = async (id: string) => {
     if (!id) {
       throw new Error("No ID found: ID required");
     }
-    const product = await ProductRepository.findById(id);
+    const product = await this.repository.findById(id);
     if (!product) {
       throw new Error("No Product with the id found");
     }
     return product;
-  }
-  static async create(data: IProducts) {
+  };
+  create = async (data: IProducts) => {
     ProductValidation(data);
-    const product = ProductRepository.create(data);
+    const product = this.repository.create(data);
     return product;
-  }
-  static async findByIdAndUpdate(id: string, data: IProducts) {
+  };
+  findByIdAndUpdate = async (id: string, data: IProducts) => {
     if (!id) {
       throw new Error("The Id is required");
     }
-    const product = await ProductRepository.findByIdAndUpdate(id, data);
+    const product = await this.repository.findByIdAndUpdate(id, data);
     if (!product) {
       throw new Error("No Product with the id found");
     }
     return product;
-  }
-  static async findByIdAndDelete(id: string) {
+  };
+  findByIdAndDelete = async (id: string) => {
     if (!id) {
       throw new Error("The Id is required");
     }
-    const product = await ProductRepository.findByIdAndDelete(id);
+    const product = await this.repository.findByIdAndDelete(id);
     if (!product) {
       throw new Error("No Product with the id found");
     }
     return product;
-  }
+  };
 }
