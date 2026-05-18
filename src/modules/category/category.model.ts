@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import type { ICategory } from "./category.types";
 
-const CategoryModel = new mongoose.Schema(
+const CategoryModel = new mongoose.Schema<ICategory>(
   {
     name: {
       type: String,
@@ -10,6 +11,7 @@ const CategoryModel = new mongoose.Schema(
       type: String,
       required: [true, "Category description is required"],
     },
+
     parentCategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "category",
@@ -19,4 +21,4 @@ const CategoryModel = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const Category = mongoose.model("category", CategoryModel);
+export const Category = mongoose.model<ICategory>("category", CategoryModel);
