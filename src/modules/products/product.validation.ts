@@ -1,28 +1,22 @@
-import type { IProducts } from "./product.types";
+import Joi from "joi";
 
-export const ProductValidation = (data: IProducts) => {
-  const {
-    ProductName,
-    ProductDesc,
-    ProductBrand,
-    ProductPrice,
-    ProductVariants,
-    ProductWarrantyDuration,
-  } = data;
+export const productSchema = Joi.object({
+  ProductName: Joi.string().trim().min(2).max(150).required(),
 
-  if (
-    !ProductName ||
-    !ProductDesc ||
-    !ProductBrand ||
-    !ProductPrice ||
-    !ProductVariants ||
-    !ProductWarrantyDuration
-  ) {
-    throw new Error("Please fill in the respected fields");
-  }
+  ProductDesc: Joi.string().trim().min(10).required(),
 
-  if (Number(ProductPrice) < 0.0) {
-    throw new Error("Product price shoud not be less than 1 naira");
-  }
-  return;
-};
+  ProductBrand: Joi.string().trim().min(2).max(100).required(),
+
+  ProductRatings: Joi.number().min(0).max(5).default(0),
+
+  ProductReviews: Joi.string().allow("", null),
+
+  ProductPrice: Joi.number().positive().required(),
+  ProductCategory: Joi.string().required(),
+
+  ProductImages: Joi.array().items(Joi.string().uri()).min(1).optional(),
+
+  ProductVariants: Joi.string().allow("", null),
+
+  ProductWarrantyDuration: Joi.number().integer().min(0).required(),
+});

@@ -11,6 +11,7 @@ export class ProductController {
 
   find = async (req: Request, res: Response, next: NextFunction) => {
     try {
+
       // getting the cache key
       const cacheKey = "products:all";
       //   using the cache key to get the cacehd products
@@ -75,6 +76,19 @@ export class ProductController {
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const files = req.files as Express.Multer.File[];
+      if (!files || files.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "No images provided",
+        });
+      }
+      console.log(files);
+      console.log("FILE META:", {
+        path: files[0]?.path,
+        size: files[0]?.size,
+        mimetype: files[0]?.mimetype,
+      });
+
       let imageUrls: string[] = [];
 
       if (files && files.length > 0) {

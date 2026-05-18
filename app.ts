@@ -8,8 +8,8 @@ import { productRouter } from "./src/modules/products/product.route";
 
 export const app = express();
 
-app.use(express.json());
-
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.get(
   "/health-check",
   (_req: Request, res: Response, _next: NextFunction) => {

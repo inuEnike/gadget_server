@@ -1,6 +1,7 @@
 import { ProductRepository } from "./product.repository";
+import { productRouter } from "./product.route";
 import type { IProducts } from "./product.types";
-import { ProductValidation } from "./product.validation";
+import { productSchema } from "./product.validation";
 
 export class ProductService {
   constructor(private repository: ProductRepository) {}
@@ -19,7 +20,10 @@ export class ProductService {
     return product;
   };
   create = async (data: IProducts) => {
-    ProductValidation(data);
+    const { error } = productSchema.validate(data);
+    if (error instanceof Error) {
+      throw new Error(error?.message);
+    }
     const product = this.repository.create(data);
     return product;
   };

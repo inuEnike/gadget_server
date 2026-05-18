@@ -11,7 +11,7 @@ const service = new ProductService(repo);
 const controller = new ProductController(service);
 
 productRouter.get("/", controller.find);
-productRouter.post("/", upload.array("ProductImages", 4), controller.create);
+productRouter.post("/", upload.array("ProductImages"), controller.create);
 productRouter.get("/:id", controller.findById);
 productRouter.patch("/:id", controller.findByIdAndUpdate);
 productRouter.delete("/:id", controller.findByIdAndDelete);

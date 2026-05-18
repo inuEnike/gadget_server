@@ -30,6 +30,11 @@ const ProductModel = new mongoose.Schema<IProducts>(
     ProductImages: {
       type: [String],
     },
+    ProductCategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+      required: [true, "The product category is required"],
+    },
     ProductVariants: {
       type: String,
     },

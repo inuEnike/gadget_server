@@ -1,11 +1,16 @@
 import type { Model } from "mongoose";
 import { Product } from "./product.models";
 import type { IProducts } from "./product.types";
+import type { Request } from "express";
 
 export class ProductRepository {
   constructor(private model: Model<IProducts>) {}
   find = async () => {
-    const products = await this.model.find({}).lean().exec();
+    const products = await this.model
+      .find({})
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
     return products;
   };
   findById = async (id: string) => {

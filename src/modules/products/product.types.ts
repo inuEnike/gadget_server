@@ -1,4 +1,4 @@
-import type { Types } from "mongoose";
+import type { Schema, Types } from "mongoose";
 import type { Document } from "mongoose";
 
 export interface IProducts extends Document {
@@ -10,6 +10,7 @@ export interface IProducts extends Document {
   ProductReviews?: string;
   ProductPrice: Number;
   ProductImages?: [string];
+  ProductCategory: Schema.Types.ObjectId;
   ProductVariants?: [string];
   ProductWarrantyDuration: Number;
 }
