@@ -1,4 +1,3 @@
-import streamifier from "streamifier";
 import { cloud } from "./cloudinary";
 import fs from "fs";
 export const uploadToCloudinary = (

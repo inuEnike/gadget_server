@@ -10,8 +10,9 @@ const repo = new ProductRepository(Product);
 const service = new ProductService(repo);
 const controller = new ProductController(service);
 
-productRouter.get("/", controller.find);
-productRouter.post("/", upload.array("ProductImages"), controller.create);
-productRouter.get("/:id", controller.findById);
-productRouter.patch("/:id", controller.findByIdAndUpdate);
-productRouter.delete("/:id", controller.findByIdAndDelete);
+productRouter
+  .get("/", controller.find)
+  .post("/", upload.array("ProductImages"), controller.create)
+  .get("/:id", controller.findById)
+  .patch("/:id", upload.array("ProductImages"), controller.findByIdAndUpdate)
+  .delete("/:id", controller.findByIdAndDelete);

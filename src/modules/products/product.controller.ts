@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { ProductService } from "./product.services";
 import { redis } from "../../../shared/core/redis/connection";
 import { uploadToCloudinary } from "../../../shared/utils/uploadToCloudinary";
+import type { IProducts } from "./product.types";
 
 export class ProductController {
   private getId(req: Request) {
@@ -75,7 +76,7 @@ export class ProductController {
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const files = req.files as Express.Multer.File[];
-      if (!files || files.length === 0) {
+      if (!files || files.length <= 0) {
         return res.status(400).json({
           success: false,
           message: "No images provided",
@@ -111,16 +112,38 @@ export class ProductController {
     next: NextFunction,
   ) => {
     try {
-      let data = req.body;
-      let id = this.getId(req);
-      const product = await this.service.findByIdAndUpdate(id as string, data);
+      const id = this.getId(req);
+
+      const files = req.files as Express.Multer.File[];
+
+      let imageUrls: string[] = [];
+
+      if (files?.length) {
+        imageUrls = await Promise.all(
+          files.map((file) => uploadToCloudinary(file)),
+        );
+      }
+
+      const data: Partial<IProducts> = {
+        ...req.body,
+      };
+
+      // only overwrite images if new ones exist
+      if (imageUrls.length > 0) {
+        data.ProductImages = imageUrls;
+      }
+
+      const product = await this.service.findByIdAndUpdate(
+        id as string,
+        data as IProducts,
+      );
 
       await redis.del("products:all");
       await redis.del(`products:${id}`);
 
-      res.status(201).json({
+      return res.status(200).json({
         success: true,
-        message: "Product Updated successfully ",
+        message: "Product updated successfully",
         product,
       });
     } catch (error) {

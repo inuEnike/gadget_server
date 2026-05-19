@@ -9,7 +9,6 @@ const CategoryModel = new mongoose.Schema<ICategory>(
     },
     description: {
       type: String,
-      required: [true, "Category description is required"],
     },
 
     parentCategory: {

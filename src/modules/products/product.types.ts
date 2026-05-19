@@ -9,7 +9,7 @@ export interface IProducts extends Document {
   ProductRatings?: Number;
   ProductReviews?: string;
   ProductPrice: Number;
-  ProductImages?: [string];
+  ProductImages?: string[];
   ProductCategory: Schema.Types.ObjectId;
   ProductVariants?: [string];
   ProductWarrantyDuration: Number;

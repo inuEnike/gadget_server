@@ -37,7 +37,6 @@ export class CategoryController {
         totalCount: categories.length,
         categories,
       });
-      res.status(200).json({});
     } catch (error) {
       next(error);
     }

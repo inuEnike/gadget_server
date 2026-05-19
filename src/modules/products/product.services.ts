@@ -1,3 +1,4 @@
+import Joi from "joi";
 import { ProductRepository } from "./product.repository";
 import { productRouter } from "./product.route";
 import type { IProducts } from "./product.types";
@@ -21,10 +22,10 @@ export class ProductService {
   };
   create = async (data: IProducts) => {
     const { error } = productSchema.validate(data);
-    if (error instanceof Error) {
+    if (error) {
       throw new Error(error?.message);
     }
-    const product = this.repository.create(data);
+    const product = await this.repository.create(data);
     return product;
   };
   findByIdAndUpdate = async (id: string, data: IProducts) => {
