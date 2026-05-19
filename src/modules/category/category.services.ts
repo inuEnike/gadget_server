@@ -41,7 +41,7 @@ export class CategoryService {
     return category;
   };
 
-  findByIdAndUpdateAndDelete = async (id: string) => {
+  findByIdAndDelete = async (id: string) => {
     if (!id) {
       throw new Error("ID is required");
     }

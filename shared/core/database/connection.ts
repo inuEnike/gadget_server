@@ -14,13 +14,15 @@ export class Database {
         `🦊 Database Connected on ${conn?.connection?.host} successfully`,
       );
       console.log(`🧚🏾‍♀️  Database Name: ${conn?.connection?.db?.databaseName}`);
-    } catch (error: any) {
-      console.error(
-        "Database connection failed:",
-        `\nName: ${error?.name}`,
-        `\nMessage: ${error?.message}`,
-      );
-      process.exit(1);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(
+          "Database connection failed:",
+          `\nName: ${error?.name}`,
+          `\nMessage: ${error?.message}`,
+        );
+        process.exit(1);
+      }
     }
   }
 }

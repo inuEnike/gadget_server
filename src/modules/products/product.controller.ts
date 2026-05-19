@@ -9,9 +9,8 @@ export class ProductController {
   }
   constructor(private service: ProductService) {}
 
-  find = async (req: Request, res: Response, next: NextFunction) => {
+  find = async (_: Request, res: Response, next: NextFunction) => {
     try {
-
       // getting the cache key
       const cacheKey = "products:all";
       //   using the cache key to get the cacehd products
@@ -82,13 +81,6 @@ export class ProductController {
           message: "No images provided",
         });
       }
-      console.log(files);
-      console.log("FILE META:", {
-        path: files[0]?.path,
-        size: files[0]?.size,
-        mimetype: files[0]?.mimetype,
-      });
-
       let imageUrls: string[] = [];
 
       if (files && files.length > 0) {
@@ -96,8 +88,6 @@ export class ProductController {
 
         imageUrls = await Promise.all(uploadPromises);
       }
-
-      console.log(imageUrls);
 
       const data = {
         ...req.body,
