@@ -19,6 +19,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/nodemailer": "^8.0.0",
     "@types/streamifier": "^0.1.2",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.10.0",

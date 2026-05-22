@@ -3,13 +3,14 @@ import { ENV } from "../../config/config";
 
 export class Database {
   private dbString() {
-    let string = ENV.DB_URI as string;
+    let string =
+      ENV.NODE_ENV === "Production" ? ENV.DB_URI_PRODUCTION : ENV.DB_URI;
     return string;
   }
   static async connect() {
     try {
       const connString = new Database();
-      let conn = await mongoose.connect(connString.dbString());
+      let conn = await mongoose.connect(connString.dbString() as string);
       console.log(
         `🦊 Database Connected on ${conn?.connection?.host} successfully`,
       );

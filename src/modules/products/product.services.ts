@@ -1,6 +1,5 @@
 import Joi from "joi";
 import { ProductRepository } from "./product.repository";
-import { productRouter } from "./product.route";
 import type { IProducts } from "./product.types";
 import { productSchema } from "./product.validation";
 
