@@ -11,9 +11,9 @@ export const AuthRouter = express();
 const repository = new AuthRepository(Auth);
 const service = new AuthService(repository);
 
-const controller = new authController(service, repository);
+export const controller = new authController(service, repository);
 AuthRouter.post("/register", controller.signup)
   .post("/verify", controller.verifyToken)
   .post("/login", controller.login)
-  .get("/me", authMiddleware, adminMiddleware, controller.getMe)
+  .get("/me", authMiddleware, controller.getMe)
   .post("/logout", controller.logout);

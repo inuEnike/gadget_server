@@ -107,7 +107,7 @@ export class authController {
 
       return res.status(200).json({
         status: "success",
-        message: "Session terminated successfully.",
+        message: "Logged out successfully.",
       });
     } catch (error) {
       next(error);
