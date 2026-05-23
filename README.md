@@ -107,7 +107,7 @@ cd gadget_server
 Install dependencies:
 
 ```bash
-npm install
+bun install
 ```
 
 ---
@@ -135,14 +135,14 @@ CLOUDINARY_API_SECRET=your_api_secret
 Development:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Production:
 
 ```bash
-npm run build
-npm start
+bun run build
+bun start
 ```
 
 ---
@@ -269,9 +269,9 @@ Example response:
 
 | Command         | Description              |
 | --------------- | ------------------------ |
-| `npm run dev`   | Start development server |
-| `npm run build` | Build TypeScript         |
-| `npm start`     | Start production server  |
+| `bun run dev`   | Start development server |
+| `bun run build` | Build TypeScript         |
+| `bun start`     | Start production server  |
 
 ---
 
@@ -308,6 +308,6 @@ For production-ready backend systems:
 
 Built by Imperium
 
-Portfolio: https://enike.vercel.app
+Portfolio: https://imperiumtech.netlify.app
 
 GitHub: https://github.com/inuEnike
