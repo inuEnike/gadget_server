@@ -3,7 +3,10 @@ import { CategoryController } from "./category.controller";
 import { CategoryRepository } from "./category.repository";
 import { Category } from "./category.model";
 import { CategoryService } from "./category.services";
-import { adminMiddleware, authMiddleware } from "../../../shared/middlewares/auth.middleware";
+import {
+  adminMiddleware,
+  authMiddleware,
+} from "../../../shared/middlewares/auth.middleware";
 export const categoryRouter = express.Router();
 
 const repository = new CategoryRepository(Category);

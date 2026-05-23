@@ -1,15 +1,313 @@
-# server
+# Gadget Server
 
-To install dependencies:
+Backend API for a modern e-commerce platform built with Node.js, Express.js, TypeScript, and MongoDB.
+
+This project focuses on scalable backend architecture, authentication, product management, category management, image uploads, validation, and production-ready API structuring.
+
+---
+
+# Features
+
+- User Authentication
+- JWT Authorization
+- Role-Based Authorization (Admin/User)
+- Password Hashing with bcrypt
+- Product Management
+- Category Management
+- Image Uploads
+- Cloudinary Integration
+- Request Validation with Joi
+- Error Handling Middleware
+- Environment-based Configuration
+- TypeScript Support
+- Modular Folder Structure
+- RESTful API Design
+
+---
+
+# Tech Stack
+
+| Technology | Purpose              |
+| ---------- | -------------------- |
+| Node.js    | Runtime              |
+| Express.js | Backend Framework    |
+| TypeScript | Type Safety          |
+| MongoDB    | Database             |
+| Mongoose   | ODM                  |
+| JWT        | Authentication       |
+| bcrypt     | Password Hashing     |
+| Cloudinary | Image Hosting        |
+| Multer     | File Upload Handling |
+| Joi        | Validation           |
+
+---
+
+# Project Structure
 
 ```bash
-bun install
+src/
+│
+├── config/                # App & environment configuration
+├── modules/
+│   ├── auth/              # Authentication module
+│   ├── product/           # Product module
+│   └── category/          # Category module
+│
+├── shared/
+│   ├── middlewares/       # Global middlewares
+│   ├── utils/             # Helper utilities
+│   └── types/             # Shared TypeScript types
+│
+└── server.ts              # Application entry point
 ```
 
-To run:
+---
+
+# Architecture Pattern
+
+This project follows a layered architecture pattern:
 
 ```bash
-bun run index.ts
+Route -> Controller -> Service -> Repository -> Database
 ```
 
-This project was created using `bun init` in bun v1.3.13. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+### Responsibilities
+
+| Layer        | Responsibility              |
+| ------------ | --------------------------- |
+| Routes       | Define API endpoints        |
+| Controllers  | Handle request/response     |
+| Services     | Business logic              |
+| Repositories | Database operations         |
+| Models       | Database schema definitions |
+
+This structure improves:
+
+- Scalability
+- Maintainability
+- Code reusability
+- Separation of concerns
+
+---
+
+# Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/inuEnike/gadget_server.git
+```
+
+Move into the project directory:
+
+```bash
+cd gadget_server
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+# Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+PORT=5000
+
+MONGO_URI=your_mongodb_connection
+
+JWT_SECRET=your_jwt_secret
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+---
+
+# Running The Project
+
+Development:
+
+```bash
+npm run dev
+```
+
+Production:
+
+```bash
+npm run build
+npm start
+```
+
+---
+
+# API Endpoints
+
+# Authentication
+
+| Method | Endpoint         | Description                 |
+| ------ | ---------------- | --------------------------- |
+| POST   | `/auth/register` | Register user               |
+| POST   | `/auth/verify`   | Verify authentication token |
+| POST   | `/auth/login`    | Login user                  |
+| GET    | `/auth/me`       | Get authenticated user      |
+| POST   | `/auth/logout`   | Logout user                 |
+
+---
+
+# Products
+
+| Method | Endpoint       | Access |
+| ------ | -------------- | ------ |
+| GET    | `/product`     | Public |
+| GET    | `/product/:id` | Public |
+| POST   | `/product`     | Admin  |
+| PATCH  | `/product/:id` | Admin  |
+| DELETE | `/product/:id` | Admin  |
+
+---
+
+# Categories
+
+| Method | Endpoint        | Access |
+| ------ | --------------- | ------ |
+| GET    | `/category`     | Public |
+| GET    | `/category/:id` | Public |
+| POST   | `/category`     | Admin  |
+| PATCH  | `/category/:id` | Admin  |
+| DELETE | `/category/:id` | Admin  |
+
+---
+
+# Authentication & Authorization
+
+This project uses JWT-based authentication.
+
+Protected routes use:
+
+- `authMiddleware`
+- `adminMiddleware`
+
+Example:
+
+```ts
+productRouter.post(
+  "/",
+  authMiddleware,
+  adminMiddleware,
+  upload.array("ProductImages"),
+  controller.create,
+);
+```
+
+### Flow
+
+1. User logs in
+2. JWT token is generated
+3. Client sends token in headers
+4. Middleware verifies token
+5. Admin middleware checks permissions
+
+---
+
+# File Uploads
+
+Product image uploads are handled using:
+
+- Multer
+- Cloudinary
+
+Example:
+
+```ts
+upload.array("ProductImages");
+```
+
+Images are uploaded to Cloudinary instead of local storage for better scalability and deployment compatibility.
+
+---
+
+# Validation
+
+This project uses Joi for request validation.
+
+Example:
+
+```ts
+const schema = Joi.object({
+  ProductName: Joi.string().required(),
+  ProductPrice: Joi.number().required(),
+});
+```
+
+Validation is separated from controllers to maintain cleaner architecture.
+
+---
+
+# Error Handling
+
+Centralized error handling middleware ensures consistent API responses.
+
+Example response:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+---
+
+# Scripts
+
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start development server |
+| `npm run build` | Build TypeScript         |
+| `npm start`     | Start production server  |
+
+---
+
+# Future Improvements
+
+- Pagination
+- Email Verification
+- OTP Authentication
+- Order Management
+- Payment Integration
+- Rate Limiting
+- API Documentation with Swagger
+- Unit Testing
+- Docker Support
+
+---
+
+# Production Notes
+
+For production-ready backend systems:
+
+- Never expose secrets
+- Use HTTPS
+- Validate all incoming data
+- Sanitize uploads
+- Use rate limiting
+- Hash passwords properly
+- Implement logging
+- Use proper HTTP status codes
+
+---
+
+# Author
+
+Built by Imperium
+
+Portfolio: https://enike.vercel.app
+
+GitHub: https://github.com/inuEnike

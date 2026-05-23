@@ -3,10 +3,7 @@ import { AuthRepository } from "./auth.repository";
 import { Auth } from "./auth.model";
 import { AuthService } from "./auth.service";
 import { authController } from "./auth.controller";
-import {
-  adminMiddleware,
-  authMiddleware,
-} from "../../../shared/middlewares/auth.middleware";
+import { authMiddleware } from "../../../shared/middlewares/auth.middleware";
 export const AuthRouter = express();
 const repository = new AuthRepository(Auth);
 const service = new AuthService(repository);
