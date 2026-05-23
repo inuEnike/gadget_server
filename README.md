@@ -117,15 +117,16 @@ bun install
 Create a `.env` file in the root directory:
 
 ```env
-PORT=5000
-
-MONGO_URI=your_mongodb_connection
-
-JWT_SECRET=your_jwt_secret
-
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+PORT=
+DB_URI=
+NODE_ENV=
+CLOUD_API_KEY=
+CLOUD_API_SECRET=
+CLOUD_NAME=
+NODEMAILER_HOST=
+NODEMAILER_PORT=
+NODEMAILER_USER=
+NODEMAILER_PASS=
 ```
 
 ---
