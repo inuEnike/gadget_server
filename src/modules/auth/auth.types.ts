@@ -5,6 +5,7 @@ export interface IAuth {
   role: string;
   phoneNo?: string;
   isVerified: boolean;
+  OTP?: string | Buffer<ArrayBufferLike>;
 }
 export enum AuthRoles {
   Admin = "admin",

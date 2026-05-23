@@ -1,7 +1,7 @@
 import { Connection } from "./connection";
 import { RegisterEvent } from "./events";
 
-export const initNodemailer = () => {
+export const InitNodemailer = () => {
   Connection.nodemailer();
   RegisterEvent();
 };
